@@ -10,13 +10,14 @@ const Navbar = () => {
     return (
         <div className='shadow py-4'>
             <div className='container px-10 lg:px-20 flex justify-between items-center w-[100vw] max-w-[1500px] m-auto'>
-                <img src={assets.logo} className='h-[40px] md:h-[45px] ' alt="" />
+                <img src={assets.logo_mobile} className='h-[40px] sm:hidden' alt="" />
+                <img src={assets.logo} className='hidden sm:block h-[40px] md:h-[45px]' alt="" />
                 {
                     user ? (
                         <div className='flex items-center gap-3'>
                             <Link to={"/applications"}>Applied Jobs</Link>
                             <p>|</p>
-                            <p>Hi, {user.fullName}</p>
+                            <p className='max-sm:hidden'>Hi, {user.fullName}</p>
                             <UserButton />
                         </div>
                     ) : (

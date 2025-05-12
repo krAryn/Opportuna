@@ -5,7 +5,9 @@ import parse from "html-react-parser"
 const JobCard = ({ job }) => {
 
   return (
-    <div className='border border-gray-300 p-6 shadow rounded'>
+    <div className='border border-gray-300 p-6 shadow rounded flex flex-col justify-between'>
+      <div>
+
       <div className='flex justify-between items-center'>
         <img className='h-8' src={assets.company_icon} alt="" />
       </div>
@@ -15,12 +17,14 @@ const JobCard = ({ job }) => {
         <span className='bg-red-50 border border-red-200 px-4 py-1.5 rounded'>{job.level}</span>
       </div>
       <div className='text-gray-500 text-sm mt-4'>
-      {parse(job.description.slice(0,150))}
-        </div>
-        <div className='mt-4 flex gap-4 text-sm'>
-      <div className='bg-primary hover:bg-primary-dull cursor-pointer transition text-white px-4 py-2 rounded'>Apply Now</div>
-      <div className='text-gray-500 border hover:bg-gray-100 cursor-pointer transition border-gray-500 px-4 py-2 rounded'>Learn More</div>
-        </div>
+        {parse(job.description.slice(0, 150))}
+      </div>
+      </div>
+      <div className='mt-4 flex gap-4 text-sm max-sm:flex-col'>
+
+        <button className='bg-primary hover:bg-primary-dull cursor-pointer transition text-white px-4 py-2 rounded flex items-center justify-center'>Apply Now</button>
+        <button className='text-gray-500 border hover:bg-gray-100 cursor-pointer transition border-gray-500 px-4 py-2 rounded flex items-center justify-center'>Learn More</button>
+      </div>
     </div>
   )
 }

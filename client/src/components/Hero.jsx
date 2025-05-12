@@ -15,10 +15,10 @@ const Hero = () => {
 
   return (
     <div className='container px-10 lg:px-20 w-[100vw] max-w-[1500px] m-auto my-10'>
-        <div className='bg-gradient-to-r from-purple-800 to-purple-950 text-white py-16 text-center rounded-xl'>
+        <div className='bg-gradient-to-r from-purple-800 to-purple-950 text-white py-16 text-center rounded-xl px-4'>
             <h2 className='text-2xl md:text-3xl lg:text-4xl font-medium mb-4'>Over 10,000+ jobs to apply</h2>
             <p className='mb-8 max-w-xl mx-auto text-sm font-light px-5'>Unlock your potential and embrace new opportunities. Your next career breakthrough is within reach—explore, apply, and achieve greatness today!</p>
-            <div className='flex items-center justify-between bg-white rounded text-gray-600 max-w-xl pl-4 mx-4 sm:mx-auto'>
+            <div className='flex items-center justify-between bg-white rounded text-gray-600 max-w-xl pl-4 sm:mx-auto'>
                 <div className='flex items-center'>
                     <img src={assets.search_icon} alt="" />
                     <input 

@@ -1,12 +1,24 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 
 @theme {
-    --color-primary: rgb(15, 79, 124);
-    --color-primary-dull: rgb(13, 65, 102);
+  --color-primary: rgb(15, 79, 124);
+  --color-primary-dull: rgb(13, 65, 102);
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
