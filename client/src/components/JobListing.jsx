@@ -43,10 +43,6 @@ const JobListing = () => {
         }
     }
 
-    // useEffect(() => {
-    //     setFilteredJobs(jobs)
-    // }, [jobs])
-
     useEffect(() => {
         setFilteredJobs(jobs)
         selectedCategories.length > 0 && setFilteredJobs(prev => prev.filter(job => selectedCategories.includes(job.category)))
@@ -57,12 +53,9 @@ const JobListing = () => {
 
         searchQuery.location.length > 0 && setFilteredJobs(prev => prev.filter(job => String(job.location).toLowerCase().includes(String(searchQuery.location).toLowerCase())))
 
+        setCurrentPage(1)
         
     }, [selectedCategories, selectedLocations, searchQuery, jobs])
-    
-    console.log("category: ", selectedCategories)
-    console.log("location: ", selectedLocations)
-    console.log("Filtered Jobs: ", filteredJobs)
 
     return (
         <div className='container px-10 lg:px-20 flex flex-col lg:flex-row justify-between items-start w-[100vw] max-w-[1500px] m-auto'>

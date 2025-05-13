@@ -7,7 +7,6 @@ const Hero = () => {
     const {searchQuery, setSearchQuery, setIsSearched} = useAppContext()
 
     const handleSubmit = () => {
-        console.log(titleRef.current.value, " ", locationRef.current.value)
         setSearchQuery({
             title: titleRef.current.value,
             location: locationRef.current.value
