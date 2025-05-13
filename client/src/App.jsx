@@ -4,6 +4,7 @@ import Home from "./pages/Home"
 import Applications from "./pages/Applications"
 import ApplyJobs from "./pages/ApplyJobs"
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 const App = () => {
 
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/apply-job/:id" element={<ApplyJobs />} />
         <Route path="/applications" element={<Applications />} />
       </Routes>
+      <Footer />
     </div>
   )
 }
