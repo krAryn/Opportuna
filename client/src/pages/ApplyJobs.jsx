@@ -22,8 +22,6 @@ const ApplyJobs = () => {
       }
     }
   }, [id, jobs])
-  
-  console.log("job data: ", jobData)
 
   return jobData ? (
     <div className='container px-10 lg:px-20 flex flex-col w-[100vw] max-w-[1500px] m-auto py-10 min-h-screen'>
