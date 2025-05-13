@@ -2,11 +2,15 @@ import { useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 import { assets, JobCategories, JobLocations, jobsData } from '../assets/assets'
 import JobCard from './JobCard'
+import { Link, NavLink } from 'react-router'
 
 const JobListing = () => {
 
     const { isSearched, searchQuery, setSearchQuery, jobs } = useAppContext()
-    const [showFilter, setShowFilter] = useState(true)
+    const [showFilter, setShowFilter] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+
+    console.log(jobs)
 
     return (
         <div className='container px-10 lg:px-20 flex flex-col lg:flex-row justify-between items-start w-[100vw] max-w-[1500px] m-auto'>
@@ -44,8 +48,8 @@ const JobListing = () => {
                             {
                                 JobCategories.map((category, index) => (
                                     <li className='flex gap-3 items-baseline' key={index}>
-                                        <input className='cursor-pointer' type="checkbox" name="" id="category" />
-                                        <label className='cursor-pointer' htmlFor="category">{category}</label>
+                                        <input className='cursor-pointer' type="checkbox" name="" id={`category${index}`} />
+                                        <label className='cursor-pointer selection:bg-[transparent]' htmlFor={`category${index}`}>{category}</label>
                                     </li>
                                 ))
                             }
@@ -58,8 +62,8 @@ const JobListing = () => {
                             {
                                 JobLocations.map((location, index) => (
                                     <li className='flex gap-3 items-baseline' key={index}>
-                                        <input className='cursor-pointer' type="checkbox" name="" id="location" />
-                                        <label className='cursor-pointer' htmlFor="location">{location}</label>
+                                        <input className='cursor-pointer' type="checkbox" name="" id={`location${index}`} />
+                                        <label className='cursor-pointer selection:bg-[transparent]' htmlFor={`location${index}`}>{location}</label>
                                     </li>
                                 ))
                             }
@@ -67,18 +71,41 @@ const JobListing = () => {
                     </div>
                 </div>
 
-
+                            {/* (currentPage - 1) * 6 - (currentPage) * 6
+                                0 - 6
+                                6 - 12
+                                12 - 18
+                                18 - 24
+                            */}
 
             </div>
             <section className='w-full lg:w-3/4 text-gray-800 max-lg:px-4'>
                 <h3 className='font-bold text-3xl py-2' id="job-list">Latest Jobs</h3>
                 <p className='mb-8'>Grab the opportunities from top companies!</p>
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'>
-                    {jobs.map((job, index) => (
+                    {jobs.slice((currentPage - 1) * 6, currentPage * 6).map((job, index) => (
                         <JobCard key={index} job={job} />
                     ))}
                 </div>
+            {
+                (jobs.length) > 0 && (
+                    <div className='flex gap-2 mt-10 mb-10 items-center justify-center'>
+                        <a href='#job-list'>
+                            <img src={assets.left_arrow_icon} onClick={() => setCurrentPage(prev => prev - 1)} className={`${currentPage !== 1?"cursor-pointer":"hidden"}`} alt="" />
+                        </a>
+                        {Array(Math.ceil(jobs.length / 6)).fill(0).map((_, index) => {
+                            return (
+                                <a href="#job-list"><button onClick={() => setCurrentPage(index + 1)} className={`cursor-pointer w-10 h-10 flex items-center justify-center border border-gray-300 rounded ${(currentPage === index + 1)?"bg-blue-100 text-blue-500 scale-90":"text-gray-500 hover:scale-105 transition"}`} key={index}>{index + 1}</button></a>
+                            )
+                        })}
+                        <a href='#job-list'>
+                            <img src={assets.right_arrow_icon} onClick={() => setCurrentPage(prev => prev + 1)} className={`${currentPage !== Math.ceil(jobs.length/6)?"cursor-pointer":"hidden"}`} alt="" />
+                        </a>
+                    </div>
+                )
+            }
             </section>
+
         </div>
     )
 }

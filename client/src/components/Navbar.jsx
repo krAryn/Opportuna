@@ -10,8 +10,10 @@ const Navbar = () => {
     return (
         <div className='shadow py-4'>
             <div className='container px-10 lg:px-20 flex justify-between items-center w-[100vw] max-w-[1500px] m-auto'>
-                <img src={assets.logo_mobile} className='h-[40px] sm:hidden' alt="" />
-                <img src={assets.logo} className='hidden sm:block h-[40px] md:h-[45px]' alt="" />
+                <Link to={"/home"}>
+                <img src={assets.logo_mobile} className='h-[40px] sm:hidden cursor-pointer' alt="" />
+                <img src={assets.logo} className='hidden sm:block h-[40px] md:h-[45px] cursor-pointer' alt="" />
+                </Link>
                 {
                     user ? (
                         <div className='flex items-center gap-3'>

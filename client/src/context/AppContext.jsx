@@ -18,7 +18,7 @@ const AppContextProvider = ({children}) => {
     }
 
     useEffect(() => {
-        fetchJobs().then()
+        fetchJobs()
     }, []) 
 
   return (
