@@ -1,5 +1,6 @@
 import {useState} from 'react'
-import { assets } from '../assets/assets'
+import { assets, jobsApplied } from '../assets/assets'
+import moment from "moment"
 
 const Applications = () => {
 
@@ -32,6 +33,39 @@ const Applications = () => {
           )
         }
       </div>
+      <h2 className='text-xl font-semibold mb-4'>Jobs Applied</h2>
+      <table className='min-w-full bg-white border border-gray-300 rounded-lg'>
+        <thead>
+          <tr>
+            <th className='py-3 px-4 border-b border-gray-300 text-left'>Company</th>
+            <th className='py-3 px-4 border-b border-gray-300 text-left'>Job Title</th>
+            <th className='py-3 px-4 border-b border-gray-300 text-left max-sm:hidden'>Location</th>
+            <th className='py-3 px-4 border-b border-gray-300 text-left max-sm:hidden'>Date</th>
+            <th className='py-3 px-4 border-b border-gray-300 text-left'>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobsApplied.map((job, index) => true ? (
+            <tr key={index}>
+              <td className='py-3 px-4 border-b border-gray-300'>
+                <div className='flex items-center gap-2'>
+                <img className='w-8 h-8' src={job.logo} alt="" />
+                {job.company}
+                </div>
+              </td>
+              <td className='py-3 px-4 border-b border-gray-300'>{job.title}</td>
+              <td className='py-3 px-4 border-b border-gray-300 max-sm:hidden'>{job.location}</td>
+              <td className='py-3 px-4 border-b border-gray-300 max-sm:hidden'>{moment(job.date).format("ll")}</td>
+              <td className='py-3 px-4 border-b border-gray-300'>
+                <span className={`${job.status === "Accepted" ? "bg-green-100" : job.status === "Rejected" ? "bg-red-100": "bg-blue-100"} px-4 py-1.5 rounded-full`}>
+
+                {job.status}
+                </span>
+                </td>
+            </tr>
+          ): (null))}
+        </tbody>
+      </table>
     </div>
   )
 }

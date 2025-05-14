@@ -5,11 +5,14 @@ import Applications from "./pages/Applications"
 import ApplyJobs from "./pages/ApplyJobs"
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import RecruiterLogin from './components/recruiter/RecruiterLogin'
+import { useAppContext } from './context/AppContext'
 
 const App = () => {
 
   return (
     <div>
+      <RecruiterLogin />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
