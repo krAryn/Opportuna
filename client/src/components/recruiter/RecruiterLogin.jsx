@@ -41,27 +41,28 @@ const RecruiterLogin = () => {
 
     return showRecruiterLogin && (
         <div onClick={() => setShowRecruiterLogin(false)} className='h-[100vh] w-[100vw] absolute z-10 bg-black/50 backdrop-blur-xs flex justify-center items-center'>
-            <div onClick={e => e.stopPropagation()} className='bg-white rounded-xl shadow-2xl m-10 p-10 text-slate-500'>
+            <div onClick={e => e.stopPropagation()} className='bg-white rounded-xl relative shadow-2xl m-10 p-10 text-slate-500 transition-[height]'>
+                <img src={assets.cross_icon} className='absolute right-8 top-8 cursor-pointer' onClick={() => setShowRecruiterLogin(false)} alt="" />
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                     {
                         formType === "Log In"
                             ? <h2 className='text-center text-2xl text-neutral-700 font-medium'>Recruiter Log In</h2>
-                            : <h2 className='text-center text-2xl text-neutral-700 font-medium'>Hey there,</h2>
+                            : <h2 className='text-left text-2xl text-neutral-700 font-medium'>Hey there,</h2>
                     }
 
 
                     {
                         formType === "Log In"
                             ? <p className='text-sm'>Welcome back! Please sign In to continue</p>
-                            : <p className='text-sm'>Welcome Recruiter! Please Register to continue</p>
+                            : <p className='text-sm'>Welcome Recruiter, Please Register to continue</p>
                     }
 
 
                     <div>
 
                     {formType === "Register" && (
-                            <div className='flex items-center justify-center gap-4 my-5'>
+                            <div className='flex items-center gap-4 my-5'>
                                 <label htmlFor="image">
                                 <img className='w-16 rounded-full' src={image ? URL.createObjectURL(image):assets.upload_area} alt="" />
                                 <input 
@@ -72,7 +73,10 @@ const RecruiterLogin = () => {
                                     hidden 
                                 />
                                 </label>
-                                <p>Upload Company <br />Logo</p>
+                                <p>
+                                    Upload Company Logo <br />
+                                    <span className='text-[15px] text-red-500'>File size should be less than 50KB</span>
+                                </p>
                             </div>
                     )}
 
