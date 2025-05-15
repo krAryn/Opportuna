@@ -1,9 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { jobsData } from "../assets/assets"
+import { useNavigate } from "react-router"          
+
+
 
 const AppContext = createContext()
 
 const AppContextProvider = ({children}) => {
+    const navigate = useNavigate()
 
     const [searchQuery, setSearchQuery] = useState({
         title: "",
@@ -24,7 +28,7 @@ const AppContextProvider = ({children}) => {
 
   return (
     <AppContext.Provider value = {{
-        searchQuery, setSearchQuery, isSearched, setIsSearched, jobs, setJobs, showRecruiterLogin, setShowRecruiterLogin
+        searchQuery, setSearchQuery, isSearched, setIsSearched, jobs, setJobs, showRecruiterLogin, setShowRecruiterLogin, navigate
     }}>
         {children}
     </AppContext.Provider>

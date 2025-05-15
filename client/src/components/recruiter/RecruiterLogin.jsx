@@ -13,14 +13,25 @@ const RecruiterLogin = () => {
         formState: { errors, isSubmitting }
     } = useForm()
 
-    const [isVisible, setIsVisible] = useState(true)
-
     // for signup
     const [image, setImage] = useState()
     const { showRecruiterLogin, setShowRecruiterLogin } = useAppContext()
 
-    const onSubmit = (data) => {
+    // Submit Simulator
+    const submitData = async () => {
+        return new Promise((res) => {
+            setTimeout(() => {
+                res()
+            }, 4000)
+        })
+    }
+
+
+    const onSubmit = async (data) => {
         console.log(data)
+        console.log(isSubmitting)
+        await submitData()
+        console.log("Data Submitted!")
     }
 
     const validate = () => {
@@ -42,7 +53,7 @@ const RecruiterLogin = () => {
     return showRecruiterLogin && (
         <div onClick={() => setShowRecruiterLogin(false)} className='h-[100vh] w-[100vw] absolute z-10 bg-black/50 backdrop-blur-xs flex justify-center items-center'>
             <div onClick={e => e.stopPropagation()} className='bg-white rounded-xl relative shadow-2xl m-10 p-10 text-slate-500 transition-[height]'>
-                <img src={assets.cross_icon} className='absolute right-8 top-8 cursor-pointer' onClick={() => setShowRecruiterLogin(false)} alt="" />
+                <img src={assets.cross_icon} className='absolute right-8 top-8 cursor-pointer transition-all' onClick={(e) => setShowRecruiterLogin(false)} alt="" />
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                     {
@@ -71,6 +82,7 @@ const RecruiterLogin = () => {
                                     id="image"
                                     onChange={(e) => setImage(e.currentTarget.files[0])}
                                     hidden 
+                                    required
                                 />
                                 </label>
                                 <p>
@@ -125,16 +137,24 @@ const RecruiterLogin = () => {
 
                     {
                         formType === "Log In"
-                            ? <button
-                                className='bg-primary cursor-pointer hover:bg-primary-dull transition w-full text-white py-2 rounded-full'
-                                onClick={() => validate()}
-                            >Log In</button>
-                            : <button
-                                className='bg-primary cursor-pointer mt-5 hover:bg-primary-dull transition w-full text-white py-2 rounded-full'
-                                onClick={() => {
-                                    validate()
-                                }}
-                            >Click here to Register</button>
+                            ? !isSubmitting 
+                                ? (<button
+                                    className='bg-primary cursor-pointer hover:bg-primary-dull transition w-full text-white py-2 rounded-full'
+                                    onClick={() => validate()}
+                                    >Log In</button>)
+                                : (<button
+                                    className='bg-gray-300 cursor-pointer  transition w-full text-gray-600 py-2 rounded-full'
+                                    disabled
+                                    >Please Wait</button>)
+                            : !isSubmitting 
+                                ? (<button
+                                    className='bg-primary cursor-pointer mt-5 hover:bg-primary-dull transition w-full text-white py-2 rounded-full'
+                                    onClick={() => validate()}
+                                    >Register</button>)
+                                : (<button
+                                    className='bg-gray-300 cursor-pointer mt-5  transition w-full text-gray-600 py-2 rounded-full'
+                                    disabled
+                                    >Please Wait</button>)
                     }
 
                     {

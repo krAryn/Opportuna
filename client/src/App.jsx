@@ -11,13 +11,17 @@ import AddJob from './pages/recruiter/AddJob'
 import Dashboard from './pages/recruiter/Dashboard'
 import ManageJobs from './pages/recruiter/ManageJobs'
 import ViewApplications from './pages/recruiter/ViewApplications'
+import { useLocation } from 'react-router'
+import 'quill/dist/quill.snow.css'
 
 const App = () => {
+
+  const location = useLocation()
 
   return (
     <div>
       <RecruiterLogin />
-      <Navbar />
+      {!String(location.pathname).includes("recruiter") && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -25,12 +29,13 @@ const App = () => {
         <Route path="/applications" element={<Applications />} />
         <Route path="/recruiter-dashboard" element={<Dashboard />}>
           <Route index element={<AddJob />} />
+          <Route path="add-job" element={<AddJob />} />
           <Route path="manage-jobs" element={<ManageJobs />} />
           <Route path="view-applications" element={<ViewApplications />} />
         </Route>
 
       </Routes>
-      <Footer />
+      {!String(location.pathname).includes("recruiter") && <Footer />}
     </div>
   )
 }
