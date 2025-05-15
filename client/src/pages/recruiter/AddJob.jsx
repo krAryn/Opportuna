@@ -38,8 +38,6 @@ const AddJob = () => {
     }
   }, [])
 
-
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='container py-4 px-5 flex flex-col w-full items-start gap-3 text-slate-700'>
       <div className='w-full'>
