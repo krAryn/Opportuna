@@ -50,9 +50,18 @@ const RecruiterLogin = () => {
 
     }, [showRecruiterLogin])
 
+    useEffect(() => {
+        setTimeout(() => {
+            if (document.querySelector(".popUp")) {
+                document.querySelector(".popUp").style.transform = "translateY(-5%)"
+                document.querySelector(".popUp").style.opacity = "1"
+            }
+        }, 0)
+    })
+
     return showRecruiterLogin && (
         <div onClick={() => setShowRecruiterLogin(false)} className='h-[100vh] w-[100vw] absolute z-10 bg-black/50 backdrop-blur-xs flex justify-center items-center'>
-            <div onClick={e => e.stopPropagation()} className='bg-white rounded-xl relative shadow-2xl m-10 p-10 text-slate-500 transition-[height]'>
+            <div onClick={e => e.stopPropagation()} className='bg-white rounded-xl relative shadow-2xl m-10 p-10 text-slate-500 transition-all translate-y-[5%] duration-300 opacity-0 popUp'>
                 <img src={assets.cross_icon} className='absolute right-8 top-8 cursor-pointer transition-all' onClick={(e) => setShowRecruiterLogin(false)} alt="" />
                 <form onSubmit={handleSubmit(onSubmit)}>
 
