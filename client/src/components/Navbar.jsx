@@ -1,14 +1,23 @@
 import React from 'react'
 import { assets } from '../assets/assets'
-import { useClerk, useUser, UserButton, UserProfile } from "@clerk/clerk-react";
+import { useClerk, UserButton, UserProfile } from "@clerk/clerk-react";
 import { Link } from 'react-router';
 import { useAppContext } from '../context/AppContext';
+
+const CustomUserButton = () => {
+    return (
+        <div>
+            <UserButton />
+        </div>
+    )
+}
 
 
 const Navbar = () => {
     const { openSignIn } = useClerk()
-    const { user } = useUser()
-    const {showRecruiterLogin, setShowRecruiterLogin} = useAppContext()
+
+    const {showRecruiterLogin, setShowRecruiterLogin, user} = useAppContext()
+
     return (
         <div className='shadow py-4'>
             <div className='container px-10 lg:px-20 flex justify-between items-center w-[100vw] max-w-[1500px] m-auto'>
@@ -22,7 +31,7 @@ const Navbar = () => {
                             <Link to={"/applications"}>Applied Jobs</Link>
                             <p>|</p>
                             <p className='max-sm:hidden'>Hi, {user.fullName}</p>
-                            <UserButton />
+                            <CustomUserButton />
                         </div>
                     ) : (
 

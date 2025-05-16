@@ -29,7 +29,6 @@ const RecruiterLogin = () => {
 
     const onSubmit = async (data) => {
         console.log(data)
-        console.log(isSubmitting)
         await submitData()
         console.log("Data Submitted!")
     }

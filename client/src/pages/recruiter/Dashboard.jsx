@@ -20,8 +20,8 @@ const Dashboard = () => {
               <img src={assets.company_icon} className='w-8 border-2 rounded-full border-gray-300 shadow-' alt="" />
               <div className='absolute right-0 top-10 group-hover:h-[65px] group-hover:py-2 transition-all w-[110px] group-hover:border border-gray-300 h-0 overflow-hidden rounded shadow bg-white'>
                 <ul className='text-sm flex flex-col gap-1'>
-                  <li onClick={(e) => console.log(e.currentTarget.innerHTML)} className='hover:bg-gray-100 px-4 cursor-pointer'>My Profile</li>
-                  <li onClick={(e) => console.log(e.currentTarget.innerHTML)} className='hover:bg-gray-100 px-4 cursor-pointer'>Logout</li>
+                  <li className='hover:bg-gray-100 px-4 cursor-pointer'>My Profile</li>
+                  <li className='hover:bg-gray-100 px-4 cursor-pointer'>Logout</li>
                 </ul>
               </div>
             </div>
