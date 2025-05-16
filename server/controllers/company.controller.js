@@ -117,8 +117,20 @@ export const isAuth = async (req, res) => {
 
 }
 
-// Get company data: /api/company/:id
+// Get company data: /api/company/company-data
 export const getCompanyData = async (req, res) => {
+    const {id} = req.body
+
+    try {
+        const company = await Company.findById(id).select("-password")
+        if (!company) {
+            return res.json({success: false, message: "Company Not found"})
+        }
+    
+        return res.json({success: true, company})
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
 
 }
 
@@ -153,9 +165,18 @@ export const getCompanyApplicants = async (req, res) => {
 
 }
 
-// Get Company posted jobs: /api/company/getCompanyPostedJobs
+// Get Company posted jobs: /api/company/list-jobs
 export const getCompanyPostedJobs = async (req, res) => {
 
+    try {
+        const {id} = req.body
+        const jobs = await Job.find({companyId: id})
+
+        return res.json({success: true, jobs})
+
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
 }
 
 // Change applicants status: /api/company/change-status
@@ -165,5 +186,20 @@ export const changeApplicantStatus = async (req, res) => {
 
 // Change job visiblity: /api/company/change-visiblity
 export const changeJobVisiblity = async (req, res) => {
+    try {
+        const {jobId, id} = req.body
 
+        const job = await Job.findById(jobId)
+
+        if (id.toString() === job.companyId.toString()) {
+            job.visible = !job.visible
+        }
+
+        await job.save()
+
+        return res.json({success: true, job})
+
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
 }
