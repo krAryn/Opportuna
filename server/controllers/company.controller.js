@@ -114,7 +114,6 @@ export const isAuth = async (req, res) => {
     } catch (error) {
         return res.json({success: false, message: error.message})
     }
-
 }
 
 // Get company data: /api/company/company-data
@@ -131,7 +130,6 @@ export const getCompanyData = async (req, res) => {
     } catch (error) {
         return res.json({success: false, message: error.message})
     }
-
 }
 
 // Post a new Job: /api/company/post-job
