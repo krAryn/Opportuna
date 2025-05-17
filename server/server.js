@@ -19,9 +19,14 @@ await connectCloudinary()
 
 app.use("/webhook", webhookRouter)
 
+const corsOption = {
+    origin: String(process.env.FRONTEND_URL),
+    credentials: true
+}
+    
+app.use(cors(corsOption))
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
 app.use(clerkMiddleware())
 
 app.use("/api/company", companyRouter)

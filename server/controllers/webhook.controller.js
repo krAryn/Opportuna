@@ -5,6 +5,7 @@ import User from "../models/user.model.js"
 const webhookRouter = express.Router()
 
 webhookRouter.post("/clerk",  express.raw({ type: 'application/json' }), async (req, res) => {
+
     try {
         const {data, type} = await verifyWebhook(req)
 
