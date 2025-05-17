@@ -2,12 +2,15 @@ import {useEffect, useRef, useState} from 'react'
 import { useForm } from 'react-hook-form'
 import Quill from 'quill';
 import { JobCategories, JobLocations } from '../../assets/assets';
+import { useAppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
 
 const AddJob = () => {
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: {isSubmitting, errors}
   } = useForm()
 
@@ -19,15 +22,37 @@ const AddJob = () => {
     })
   }
 
-  const onSubmit = async (data) => {
-    console.log(data)
-    await submitData()
-    console.log("Data Submitted!")
+  const {axios} = useAppContext()
+
+  const onSubmit = async (jobData) => {
+
+    // jobData = { 
+    //   title: "", 
+    //   category: "", 
+    //   location: "", 
+    //   level: "", 
+    //   salary: , 
+    //   description: ""
+    // }
+    jobData.description = document.querySelector(".ql-editor").innerHTML
+
+    try {
+      const {data} = await axios.post("/api/company/post-job", jobData)
+
+      if (data.success) {
+        toast.success("Job Posted Successfully")
+      } else {
+        toast.error(data.message)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      reset()
+      document.querySelector(".ql-editor").innerHTML = ""
+    }
+
   }
-
-  const [quill, setQuill] = useState()
-
-  const [value, setValue] = useState('');
 
   useEffect(() => {
     if (!document.querySelector("#editor").innerHTML) {
@@ -45,14 +70,14 @@ const AddJob = () => {
         <input 
           type="text" 
           placeholder='Type here'
-          className='w-full max-w-lg px-3 py-2 border border-gray-300 rounded'
-          {...register("jobTitle", {required: "Please enter a Job Title"})} />
+          className='w-full px-3 py-2 border border-gray-300 rounded'
+          {...register("title", {required: "Please enter a Job Title"})} />
       </div>
 
-      <div className='w-full max-w-lg'>
+      <div className='w-full'>
         <p className='my-2'>Job Description</p>
         <div id='editor'>
-
+            {/* ql-editor class contains the required information */}
         </div>
       </div>
       <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8'>
@@ -102,7 +127,10 @@ const AddJob = () => {
           placeholder='25000' 
           {...register("salary", {required: "Please enter the Salary"})} />
       </div>
-      <button className='w-28 py-3 mt-4 bg-black text-white rounded'>ADD</button>
+
+      {!isSubmitting
+        ? <button className='cursor-pointer w-38 py-3 mt-4 bg-black text-white rounded'>Add Job</button>
+        : <button className='w-38 py-3 mt-4 bg-gray-300 text-gray-600 rounded' disabled>Please Wait</button>}
     </form>
   )
 }
