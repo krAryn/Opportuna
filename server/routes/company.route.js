@@ -7,6 +7,7 @@ import {
     getCompanyPostedJobs, 
     isAuth, 
     loginCompany, 
+    logoutCompany, 
     postJob, 
     registerCompany 
 } from "../controllers/company.controller.js";
@@ -17,7 +18,8 @@ const companyRouter = express.Router()
 
 
 companyRouter.post("/register", upload.single("logo"), registerCompany)
-companyRouter.post("/login", loginCompany)
+companyRouter.post("/login", upload.none(), loginCompany)
+companyRouter.get("/logout", logoutCompany)
 companyRouter.post("/company-data", authCompany, getCompanyData)
 companyRouter.post("/post-job", authCompany, postJob)
 companyRouter.post("/applicants", authCompany, getCompanyApplicants)

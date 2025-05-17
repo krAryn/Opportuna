@@ -7,10 +7,10 @@ import Job from "../models/job.model.js"
 
 // Register a company: /api/company/register
 export const registerCompany = async (req, res) => {
-    const {name, email, password} = req.body
+    const {companyName, email, password} = req.body
     const logo = req.file
 
-    if (!name || !email || !password || !logo) {
+    if (!companyName || !email || !password || !logo) {
         return res.json({success: false, message: "Missing Details!"})
     }
 
@@ -25,7 +25,7 @@ export const registerCompany = async (req, res) => {
         const image = await cloudinary.uploader.upload(logo.path, {resource_type: "image"})
 
         const company = await Company.create({
-            name,
+            name: companyName,
             email,
             password: hashedPassword,
             image: image.secure_url
@@ -33,7 +33,10 @@ export const registerCompany = async (req, res) => {
 
         const token = generateToken(company._id)
 
-        res.cookie("token", token)
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 7 * 60 * 60 * 1000
+        })
 
         return res.json({
             success: true, 
@@ -53,13 +56,13 @@ export const registerCompany = async (req, res) => {
 
 // Company Login: /api/company/login
 export const loginCompany = async (req, res) => {
+    console.log("in login controller")
     const {email, password} = req.body
 
     if (!email || !password) {
         return res.json({success: false, message: "Missing Details!"})
     }
 
-    
     try {
         console.log(email, " ", password)
         const company = await Company.findOne({email})
@@ -85,7 +88,7 @@ export const loginCompany = async (req, res) => {
                 }
             })
         } else {
-            return res.json({success: false, message: "Incorrect Credentials!"})
+            return res.json({success: false, message: "Incorrect Password!"})
         }
 
     } catch (error) {
@@ -196,6 +199,27 @@ export const changeJobVisiblity = async (req, res) => {
         await job.save()
 
         return res.json({success: true, job})
+
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
+}
+
+// Logout from company: /api/company/logout
+export const logoutCompany = async (req, res) => {
+    try {
+        const {token} = req.cookies;
+
+        if (!token) {
+            return res.json({succcess: true, message: "Already Logged Out!"})
+        }
+
+        res.clearCookie("token", {
+            httpOnly: true,
+            maxAge: 7 * 60 * 60 * 1000
+        })
+
+        return res.json({success: true, message: "Logged Out"})
 
     } catch (error) {
         return res.json({success: false, message: error.message})
