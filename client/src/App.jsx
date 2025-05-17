@@ -12,6 +12,7 @@ import Dashboard from './pages/recruiter/Dashboard'
 import ManageJobs from './pages/recruiter/ManageJobs'
 import ViewApplications from './pages/recruiter/ViewApplications'
 import { useLocation } from 'react-router'
+import { ToastContainer, toast } from 'react-toastify';
 import 'quill/dist/quill.snow.css'
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
 
   return (
     <div>
+      <ToastContainer />
       <RecruiterLogin />
       {!String(location.pathname).includes("recruiter") && <Navbar />}
       <Routes>

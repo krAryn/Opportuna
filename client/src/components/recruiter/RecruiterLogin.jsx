@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { useAppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets'
-
+import { toast } from 'react-toastify'
 
 const RecruiterLogin = () => {
 
@@ -10,12 +10,15 @@ const RecruiterLogin = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting }
     } = useForm()
 
+    const IMAGE_SIZE = import.meta.env.COMPANY_LOGO_SIZE || 2 * 1000 * 1000  // 2MB
+
     // for signup
     const [image, setImage] = useState()
-    const { showRecruiterLogin, setShowRecruiterLogin } = useAppContext()
+    const { showRecruiterLogin, setShowRecruiterLogin, axios, company, setCompany, navigate, } = useAppContext()
 
     // Submit Simulator
     const submitData = async () => {
@@ -27,10 +30,53 @@ const RecruiterLogin = () => {
     }
 
 
-    const onSubmit = async (data) => {
-        console.log(data)
-        await submitData()
-        console.log("Data Submitted!")
+    const onSubmit = async (companyData) => {
+        // companyData = {
+        //     email: "", 
+        //     password: "",
+        //     companyName: ""
+        // }
+
+        const formData = new FormData()
+        for (let key in companyData) {
+            formData.append(key, companyData[key])
+        }
+        
+        try {
+            if (formType === "Log In") {
+                const {data} = await axios.post("/api/company/login", formData)
+                if (data.success) {
+                    setCompany(data.company)
+                    setShowRecruiterLogin(false)
+                    navigate("/recruiter-dashboard/add-job")
+                    toast.success("Logged In Successfully")
+                } else {
+                    toast.error(data.message)
+                }
+            } else {
+
+                if (image.size < IMAGE_SIZE) {
+                    formData.append("logo", image)
+                    const {data} = await axios.post("/api/company/register", formData)
+                    if (data.success) {
+                        setCompany(data.company)
+                        setShowRecruiterLogin(false)
+                        navigate("/recruiter-dashboard/add-job")
+                        toast.success("Registered Successfully")
+                    } else {
+                        toast.error(data.message)
+                    }
+                } else {
+                    toast.error("File size limit breach!")
+                }
+                
+                setImage(null)
+            }
+        } catch (error) {
+            console.log("Error: ", error.message)
+        } finally{
+            reset()
+        }
     }
 
     const validate = () => {
@@ -95,7 +141,7 @@ const RecruiterLogin = () => {
                                 </label>
                                 <p>
                                     Upload Company Logo <br />
-                                    <span className='text-[15px] text-red-500'>File size should be less than 50KB</span>
+                                    <span className='text-[15px] text-red-500'>File size should be less than 2MB</span>
                                 </p>
                             </div>
                     )}
