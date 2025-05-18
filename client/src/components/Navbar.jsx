@@ -16,7 +16,7 @@ const CustomUserButton = () => {
 const Navbar = () => {
     const { openSignIn } = useClerk()
 
-    const {showRecruiterLogin, setShowRecruiterLogin, user} = useAppContext()
+    const {showRecruiterLogin, setShowRecruiterLogin, user, fetchCompany, company, navigate} = useAppContext()
 
     return (
         <div className='shadow py-4'>
@@ -36,7 +36,15 @@ const Navbar = () => {
                     ) : (
 
                         <div className='flex gap-4 max-sm:text-xs'>
-                            <button onClick={(e) => {e.stopPropagation(); setShowRecruiterLogin(true);}} className='text-gray-600 cursor-pointer'>Recruiter Login</button>
+                            <button onClick={(e) => {
+                                e.stopPropagation(); 
+                                fetchCompany() 
+                                if (company) {
+                                    navigate("/recruiter-dashboard")
+                                } else {
+                                    setShowRecruiterLogin(true);
+                                }
+                                }} className='text-gray-600 cursor-pointer'>Recruiters' Space</button>
                             <button onClick={() => {
                                 openSignIn()
                             }} className='bg-primary hover:bg-primary-dull transition cursor-pointer text-white px-6 sm:px-9 py-2 rounded-full'>Login</button>

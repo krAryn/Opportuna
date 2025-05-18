@@ -30,7 +30,6 @@ webhookRouter.post("/clerk",  express.raw({ type: 'application/json' }), async (
         
         return res.json({success: true, message: `${type} event occured`})
     } catch (error) {
-        console.log("Webhook Error: ", error.message)
         return res.json({success: false, message: "Webhook error!"})
     }
 })

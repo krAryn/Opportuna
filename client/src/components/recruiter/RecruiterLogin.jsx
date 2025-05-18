@@ -73,7 +73,7 @@ const RecruiterLogin = () => {
                 setImage(null)
             }
         } catch (error) {
-            console.log("Error: ", error.message)
+            toast.error(error.message)
         } finally{
             reset()
         }
@@ -81,7 +81,7 @@ const RecruiterLogin = () => {
 
     const validate = () => {
         if (Object.keys(errors).length > 0) {
-            console.log(errors[Object.keys(errors)[0]].message)
+            toast.error(errors[Object.keys(errors)[0]].message)
         }
     }
 

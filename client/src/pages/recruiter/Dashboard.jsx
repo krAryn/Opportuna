@@ -49,8 +49,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className='flex items-start'>
-        <div className='inline-block min-h-screen border-r-2 border-gray-200'>
+      <div className='flex items-start h-screen'>
+        <div className='inline-block min-h-screen border-r-2 border-gray-200 sm:min-w-[210px]'>
           <ul className='flex flex-col items-start pt-5 text-gray-800'>
             <NavLink to="/recruiter-dashboard/add-job" className={({ isActive }) => `flex items-center p-3 sm:px-6 gap-2 w-full  ${isActive ? "bg-blue-100 border-r-4 border-primary/80" : "hover:bg-gray-100 "}`}>
               <img className='min-w-4' src={assets.add_icon} alt="" /><p className='max-sm:hidden'>Add Jobs</p></NavLink>
@@ -61,7 +61,7 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        <div>
+        <div className='h-full w-full h-screen overflow-auto'>
 
           <Outlet />
         </div>

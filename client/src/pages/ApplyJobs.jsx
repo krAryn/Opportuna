@@ -1,18 +1,67 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { useAppContext } from '../context/AppContext'
-import {GridLoader} from "react-spinners"
 import { assets } from '../assets/assets'
 import kconvert from "k-convert"
 import moment from "moment"
 import parse from "html-react-parser"
 import JobCard from '../components/JobCard'
+import { toast } from 'react-toastify'
+import Loader from '../components/Loader'
 
 const ApplyJobs = () => {
 
-  const {id} = useParams()
-  const {jobs} = useAppContext()
+  const { id } = useParams()
+  const { jobs, userData, navigate, userApplications, axios, fetchUserApplications } = useAppContext()
   const [jobData, setJobData] = useState()
+  const [applied, setApplied] = useState(false)
+
+  const checkAlreadyApplied = () => {
+
+    if (!jobData) {
+      return
+    }
+
+    const hasApplied = userApplications.filter(item => item.jobId._id === jobData._id)
+    if (hasApplied.length > 0) {
+      setApplied(true)
+    } else {
+      setApplied(false)
+    }
+  }
+
+  useEffect(() => {
+    checkAlreadyApplied()
+  }, [jobData, userApplications])
+
+  const applyHandler = async () => {
+
+    try {
+      if (!userData) {
+        return toast.error("Please Login to Apply for Jobs")
+      }
+
+      if (userData.resume === "") {
+        navigate("/applications")
+        return toast.error("Please attach a resume to Apply")
+      }
+
+      const { data } = await axios.post("/api/user/apply", {
+        jobId: jobData._id,
+        userId: userData._id
+      })
+
+      if (data.success) {
+        toast.success("Application sent")
+        fetchUserApplications()
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+
+  }
 
   useEffect(() => {
     for (let job of jobs) {
@@ -53,7 +102,9 @@ const ApplyJobs = () => {
           </div>
 
           <div className='flex flex-col justify-center text-end text-sm max-md:mx-auto max-md:text-center'>
-            <button className='bg-primary hover:bg-primary-dull transition cursor-pointer p-2.5 px-10 text-white rounded'>Apply Now</button>
+            <button
+              className='bg-primary hover:bg-primary-dull transition cursor-pointer p-2.5 px-10 text-white rounded'
+              onClick={applyHandler}>{applied ? "Applied" : "Apply Now"}</button>
             <p className='mt-2 text-gray-600'>Posted {moment(jobData.date).fromNow()}</p>
           </div>
 
@@ -63,14 +114,25 @@ const ApplyJobs = () => {
           <div className='w-full lg:w-2/3'>
             <h2 className='font-bold text-2xl mb-4'>Job Description</h2>
             <div className='rich-text'>{parse(jobData.description)}</div>
-            <button className='bg-primary hover:bg-primary-dull transition cursor-pointer p-2.5 px-10 text-white rounded mt-10'>Apply Now</button>
+            <button
+              className='bg-primary hover:bg-primary-dull transition cursor-pointer p-2.5 px-10 text-white rounded mt-10'
+              onClick={applyHandler}>{applied ? "Already Applied" : "Apply Now"}</button>
           </div>
 
-            {/* Side br for More Jobs from same org */}
+          {/* Side br for More Jobs from same org */}
           <div className='lg:w-1/3 mt-8 lg:mt-0 lg:ml-8'>
             <h2 className='mb-4'>More Jobs from {jobData.companyId.name}</h2>
             <div className='max-lg:grid max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 flex flex-col gap-4'>
-            {jobs.filter((job) => job._id !== jobData._id && job.companyId._id === jobData.companyId._id).slice(0, 3).map((job, index) => <JobCard key={index} job={job} />)}
+              {jobs
+                .filter(job => job._id !== jobData._id && job.companyId._id === jobData.companyId._id)
+                .filter(job => {
+                  for (let userApplication of userApplications) {
+                    if (userApplication.jobId._id === job._id) {
+                      return false
+                    }
+                  }
+                  return true
+                }).slice(0, 3).map((job, index) => <JobCard key={index} job={job} />)}
             </div>
           </div>
 
@@ -80,8 +142,8 @@ const ApplyJobs = () => {
     </div>
   ) : (
     <div className='w-full h-[100vh] flex justify-center items-center'>
-      <GridLoader size={15} color='rgb(15, 79, 124)' />
-    </div>
+    <Loader />
+  </div>
   )
 }
 

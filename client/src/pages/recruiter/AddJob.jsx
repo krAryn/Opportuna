@@ -70,11 +70,11 @@ const AddJob = () => {
         <input 
           type="text" 
           placeholder='Type here'
-          className='w-full px-3 py-2 border border-gray-300 rounded'
+          className='w-full px-3 py-2 border border-gray-300 rounded max-w-[600px]'
           {...register("title", {required: "Please enter a Job Title"})} />
       </div>
 
-      <div className='w-full'>
+      <div className='w-full max-w-[600px]'>
         <p className='my-2'>Job Description</p>
         <div id='editor'>
             {/* ql-editor class contains the required information */}

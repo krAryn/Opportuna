@@ -3,9 +3,9 @@ import JobApplication from "../models/jobapplication.model.js"
 import User from "../models/user.model.js"
 import {v2 as cloudinary} from "cloudinary"
 
-// Get user Data
+// Get user Data: /api/user/user
 export const getUserData = async(req, res) => {
-    const userId = req.auth.userId
+    const {userId} = req.body
 
     try {
         const user = await User.findById(userId)
@@ -20,10 +20,9 @@ export const getUserData = async(req, res) => {
     }
 }
 
-// Apply for a Job
+// Apply for a Job: /api/uesr/apply
 export const applyForJob = async(req, res) => {
-    const {jobId} = req.body
-    const {userId} = req.auth
+    const {userId, jobId} = req.body
 
     try {
         const isAlreadyApplied = await JobApplication.find({$and: [{jobId}, {userId}]})
@@ -50,32 +49,31 @@ export const applyForJob = async(req, res) => {
     }
 }
 
-// Get user applications 
+// Get user applications: /api/user/applications
 export const getUserJobApplications = async (req, res) => {
     try {
-        const {userId} = req.auth
+        const {userid} = req.headers
 
-        const application = await JobApplication.find({userId})
+        const applications = await JobApplication.find({userId: userid})
         .populate("companyId", "name email image")
         .populate("jobId", "title description location category level salary")
         // .exec()
 
-        if (!application) {
+        if (!applications) {
             return res.json({success: false, message: "No Job Applications found!"})
         }
 
-        return res.json({success: true, application})
+        return res.json({success: true, applications})
 
     } catch (error) {
         return res.json({success: false, message: error.message})
     }
 }
 
-// update user resume
+// update user resume: /api/user/update-resume
 export const updateUserResume = async (req, res) => {
     try {
-        const {userId} = req.auth;
-
+        const {userId} = req.body;
         const resumeFile = req.file
 
         const userData = await User.findById(userId)

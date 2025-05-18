@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import {v2 as cloudinary} from "cloudinary"
 import { generateToken } from "../utils/generateToken.js"
 import Job from "../models/job.model.js"
+import JobApplication from "../models/jobapplication.model.js"
 
 
 // Register a company: /api/company/register
@@ -49,14 +50,12 @@ export const registerCompany = async (req, res) => {
         })
  
     } catch (error) {
-        console.log(error.message)
         return res.json({success: false, message: error.message})
     }
 }
 
 // Company Login: /api/company/login
 export const loginCompany = async (req, res) => {
-    console.log("in login controller")
     const {email, password} = req.body
 
     if (!email || !password) {
@@ -64,7 +63,6 @@ export const loginCompany = async (req, res) => {
     }
 
     try {
-        console.log(email, " ", password)
         const company = await Company.findOne({email})
 
         if (!company) {
@@ -101,7 +99,6 @@ export const isAuth = async (req, res) => {
 
     try {
         const {id} = req.body;
-        // console.log(id)
         const company = await Company.findById(id)
         
         if (company) {
@@ -163,6 +160,17 @@ export const postJob = async (req, res) => {
 
 // Get Applicants list: /api/company/applicants
 export const getCompanyApplicants = async (req, res) => {
+    const {id} = req.body
+    try {
+        const applications = await JobApplication.find({companyId: id})
+            .populate("userId", "name image resume")
+            .populate("jobId", "title location category level salary")
+    
+            return res.json({success: true, applications})
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
+
 
 }
 
@@ -173,7 +181,17 @@ export const getCompanyPostedJobs = async (req, res) => {
         const {id} = req.body
         const jobs = await Job.find({companyId: id})
 
-        return res.json({success: true, jobs})
+        // Add no of applicants of the job
+            // get no of JobApplications of a {job._id, id} set
+
+        let jobsData = []
+
+        for (let job of jobs) {
+            const applications = await JobApplication.find({$and: [{jobId: job._id}, {companyId: id}]})
+            jobsData.push({...job.toObject(), applicants: applications.length})
+        }
+
+        return res.json({success: true, jobsData})
 
     } catch (error) {
         return res.json({success: false, message: error.message})
@@ -182,7 +200,15 @@ export const getCompanyPostedJobs = async (req, res) => {
 
 // Change applicants status: /api/company/change-status
 export const changeApplicantStatus = async (req, res) => {
+    try {
+        const {applicantId, status} = req.body
 
+        await JobApplication.findByIdAndUpdate(applicantId, {status})
+
+        return res.json({success: true, message: "Status Changed"})
+    } catch (error) {
+        return res.json({success: false, message: error.message})
+    }
 }
 
 // Change job visiblity: /api/company/change-visiblity

@@ -27,7 +27,6 @@ const corsOption = {
 app.use(cors(corsOption))
 app.use(express.json())
 app.use(cookieParser())
-app.use(clerkMiddleware())
 
 app.use("/api/company", companyRouter)
 app.use("/api/jobs", jobRouter)

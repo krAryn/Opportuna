@@ -19,19 +19,35 @@ const AppContextProvider = ({children}) => {
     })
     
     const [isSearched, setIsSearched] = useState(false)
+    const [jobs, setJobs] = useState([])
     const [showRecruiterLogin, setShowRecruiterLogin] = useState(false)
     const {user} = useUser()
     const [company, setCompany] = useState()
 
+    const [userData, setUserData] = useState()
+    const [userApplications, setUserApplications] = useState([])
+    
+    const fetchJobs = async() => {
+        // setJobs(jobsData)
+        try {
+            const {data} = await axios.get("/api/jobs/list")
+
+            if (data.success) {
+                setJobs(data.jobs)
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
     const fetchCompany = async () => {
         try {
             const {data} = await axios.post("/api/company/is-auth", {})
-            console.log(data)
             if (data.success) {
                 setCompany(data.company)
-                navigate("/recruiter-dashboard/add-job") 
             } else {
-                console.log(data.message)
                 toast.error("Please Log In to continue!")
                 navigate("/")
             }
@@ -39,10 +55,55 @@ const AppContextProvider = ({children}) => {
             toast.error(error.message)
         }
     }
+
+    const fetchUserData = async () => {
+        if (user) {
+            try {
+                const {data} = await axios.post("/api/user/user", {userId: user.id})
+                if (data.success) {
+                    setUserData(data.user)
+                } else {
+                    toast.error(data.message)
+                }
+            } catch (error) {
+                toast.error(error.message)
+            }
+        }
+    }
+
+    const fetchUserApplications = async () => {
+
+        if (!userData) {
+            return
+        }
+
+        try {
+            const {data} = await axios.get("/api/user/applications", {
+                headers: {userid: userData._id}
+            })
+
+            if (data.success) {
+                setUserApplications(data.applications)
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchJobs()
+        fetchUserData()
+    }, [user]) 
+
+    useEffect(() => {
+        fetchUserApplications()
+    }, [userData])
     
     return (
     <AppContext.Provider value = {{
-        searchQuery, setSearchQuery, isSearched, setIsSearched, jobs, setJobs, showRecruiterLogin, setShowRecruiterLogin, navigate, user, company, setCompany, axios, fetchCompany
+        searchQuery, setSearchQuery, isSearched, setIsSearched, jobs, setJobs, showRecruiterLogin, setShowRecruiterLogin, navigate, user, company, setCompany, axios, fetchCompany, userData, userApplications, setUserApplications, fetchUserData, fetchUserApplications
     }}>
         {children}
     </AppContext.Provider>
