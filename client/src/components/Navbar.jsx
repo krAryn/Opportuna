@@ -6,7 +6,7 @@ import { useAppContext } from '../context/AppContext';
 
 const CustomUserButton = () => {
     return (
-        <div>
+        <div className='flex items-center justify-center'>
             <UserButton />
         </div>
     )
@@ -40,7 +40,7 @@ const Navbar = () => {
                                 e.stopPropagation(); 
                                 fetchCompany() 
                                 if (company) {
-                                    navigate("/recruiter-dashboard")
+                                    navigate("/recruiter-dashboard/add-job")
                                 } else {
                                     setShowRecruiterLogin(true);
                                 }

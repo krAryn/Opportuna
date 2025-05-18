@@ -96,3 +96,7 @@
 .rich-text li {
   margin-bottom: 8px;
 }
+
+.rec-db-sec {
+  height: calc(100vh - 77px)
+}
